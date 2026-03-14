@@ -1,0 +1,31 @@
+services:
+  web:
+    build: .
+    labels:
+      playgrounds.dev/github_url: "https://github.com/vyakymenko/animals-for-kids"
+      playgrounds.dev/source_mount: "/app"
+      playgrounds.dev/dockerfile: "Dockerfile"
+      playgrounds.dev/env_file: ".env.example"
+      playgrounds.dev/expose: "external:3000"
+      playgrounds.dev/subdomain: "@"
+      playgrounds.dev/ide: "true"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/animals_development
+      - RAILS_ENV=development
+      - SECRET_KEY_BASE=devsecret
+      - RAILS_LOG_TO_STDOUT=true
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    labels:
+      playgrounds.dev/expose: "internal:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=animals_development
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

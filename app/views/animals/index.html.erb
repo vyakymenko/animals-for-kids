@@ -1,0 +1,78 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <div class="text-6xl mb-4 emoji-bounce">🐾</div>
+    <h1 class="text-5xl font-black text-amber-600 mb-2">Animal World!</h1>
+    <p class="text-xl text-amber-700 font-semibold">Discover amazing animals from around the world 🌍</p>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="flex flex-wrap justify-center gap-3 mb-10">
+    <% @categories.each do |cat| %>
+      <% icons = { 'All' => '🌟', 'Mammals' => '🦁', 'Birds' => '🦜', 'Reptiles' => '🐊', 'Fish' => '🐠', 'Insects' => '🦋' } %>
+      <%= link_to animals_path(category: cat == 'All' ? nil : cat),
+          class: "px-5 py-2.5 rounded-full text-lg font-bold transition-all duration-200 shadow-md
+                  #{@selected == cat
+                    ? 'bg-amber-500 text-white scale-110 shadow-amber-300'
+                    : 'bg-white text-amber-700 hover:bg-amber-100 border-2 border-amber-200'}" do %>
+        <%= icons[cat] %> <%= cat %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Count -->
+  <p class="text-center text-amber-600 font-bold mb-6 text-lg">
+    <%= pluralize(@animals.count, 'animal') %> found! 🎉
+  </p>
+
+  <!-- Animal Cards Grid -->
+  <% colors = %w[bg-red-50 bg-orange-50 bg-yellow-50 bg-green-50 bg-blue-50 bg-purple-50 bg-pink-50 bg-teal-50] %>
+  <% borders = %w[border-red-200 border-orange-200 border-yellow-200 border-green-200 border-blue-200 border-purple-200 border-pink-200 border-teal-200] %>
+  <% badges = %w[bg-red-100 text-red-700 bg-orange-100 text-orange-700 bg-yellow-100 text-yellow-700 bg-green-100 text-green-700 bg-blue-100 text-blue-700 bg-purple-100 text-purple-700 bg-pink-100 text-pink-700 bg-teal-100 text-teal-700] %>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <% @animals.each_with_index do |animal, i| %>
+      <% ci = i % colors.size %>
+      <div class="card-hover rounded-3xl border-2 <%= colors[ci] %> <%= borders[ci] %> p-6 flex flex-col items-center text-center shadow-sm">
+
+        <!-- Emoji -->
+        <div class="text-7xl mb-4 leading-none">
+          <%= animal.emoji %>
+        </div>
+
+        <!-- Name -->
+        <h2 class="text-2xl font-black text-gray-800 mb-1"><%= animal.name %></h2>
+
+        <!-- Category Badge -->
+        <span class="px-3 py-1 rounded-full text-sm font-bold mb-3
+          <%= case animal.category
+              when 'Mammals'  then 'bg-orange-100 text-orange-700'
+              when 'Birds'    then 'bg-blue-100 text-blue-700'
+              when 'Reptiles' then 'bg-green-100 text-green-700'
+              when 'Fish'     then 'bg-cyan-100 text-cyan-700'
+              when 'Insects'  then 'bg-purple-100 text-purple-700'
+              end %>">
+          <%= animal.category %>
+        </span>
+
+        <!-- Description -->
+        <p class="text-gray-600 text-sm leading-relaxed mb-4"><%= animal.description %></p>
+
+        <!-- Fun Fact -->
+        <% if animal.fun_fact.present? %>
+          <div class="w-full bg-white/70 rounded-2xl p-3 border border-amber-200">
+            <p class="text-xs font-bold text-amber-600 mb-1">⚡ Fun Fact!</p>
+            <p class="text-xs text-gray-600"><%= animal.fun_fact %></p>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Footer -->
+  <div class="text-center mt-12 text-amber-500 font-semibold">
+    <p>🌿 Love animals? Keep learning and exploring! 🌿</p>
+  </div>
+
+</div>
